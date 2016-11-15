@@ -1,0 +1,12 @@
+nginx:
+  build: ./nginx/
+  ports:
+    - 80:80
+  container_name: nginx
+
+
+nodejs:
+  build: ./node/
+  ports:
+    - 8888:8888
+  container_name: nodejs
