@@ -8,7 +8,7 @@ const PORT = 8080;
 // App
 const app = express();
 app.get('/', function (req, res) {
-  res.send('Hello world!!!!! This works\n');
+  res.send('Hello world!!!!! This works, via nginx proxy_pass.\n');
 });
 
 app.listen(PORT);
