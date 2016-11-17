@@ -1,12 +1,11 @@
-nginx:
-  build: ./nginx/
-  ports:
-    - 80:80
-  container_name: nginx
 
 
 nodejs:
-  build: ./node/
+  build: ./docker/node
+  volumes:
+    - ./src/server:/usr/src/app
+  working_dir: /usr/src/app
+  command: sh -c 'npm install; npm start'
   ports:
-    - 8888:8888
+    - "8080:8080"
   container_name: nodejs
