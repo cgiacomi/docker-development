@@ -14,6 +14,8 @@ node:
   command: sh -c 'npm install; npm start'
   expose:
     - 8080
+  links:
+    - mongo
   volumes_from:
     - node-data
   container_name: node
@@ -25,3 +27,18 @@ node-data:
       - ./src/server:/usr/src/app
   command: "true"
   container_name: node-data
+
+
+mongo:
+  build: ./docker/mongodb
+  volumes_from:
+    - mongo-data
+  container_name: mongo
+
+
+mongo-data:
+  image: node:6.9-alpine
+  volumes:
+      - ./src/data:/data/db
+  command: "true"
+  container_name: mongo-data
