@@ -31,6 +31,8 @@ node-data:
 
 mongo:
   build: ./docker/mongodb
+  ports:
+    - 27017:27017
   volumes_from:
     - mongo-data
   container_name: mongo
