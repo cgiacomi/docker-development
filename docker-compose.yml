@@ -5,6 +5,7 @@ nginx:
     - 80:80
   links:
     - node
+    - loggly
   container_name: nginx
 
 
@@ -16,6 +17,7 @@ node:
     - 8080
   links:
     - mongo
+    - loggly
   volumes_from:
     - node-data
   container_name: node
@@ -33,6 +35,8 @@ mongo:
   build: ./docker/mongodb
   ports:
     - 27017:27017
+  links:
+    - loggly
   volumes_from:
     - mongo-data
   container_name: mongo
@@ -44,3 +48,11 @@ mongo-data:
       - ./src/data:/data/db
   command: "true"
   container_name: mongo-data
+
+loggly:
+  build: ./docker/loggly
+  ports:
+    - 514/udp
+  environment:
+    - LOGGLY_AUTH_TOKEN=MY_LOGGLY_TOKEN
+    - LOGGLY_TAG=docker-loggly
