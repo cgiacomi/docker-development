@@ -31,5 +31,7 @@ man/man5
 man/man8
 vendor/pkg/
 
+src/data/
+
 
 node_modules/
