@@ -1,58 +1,57 @@
+version: '2.1'
 
-nginx:
-  build: ./docker/nginx
-  ports:
-    - 80:80
-  links:
-    - node
-    - loggly
-  container_name: nginx
+services:
 
+  nginx:
+    build: ./docker/nginx
+    ports:
+      - 80:80
+    links:
+      - node
+      - loggly
+    container_name: nginx
 
-node:
-  build: ./docker/node
-  working_dir: /usr/src/app
-  command: sh -c 'npm install; npm start'
-  expose:
-    - 8080
-  links:
-    - mongo
-    - loggly
-  volumes_from:
-    - node-data
-  container_name: node
+  node:
+    build: ./docker/node
+    command: sh -c 'npm install; npm start'
+    ports:
+      - 8080:8080
+    links:
+      - mongo
+      - loggly
+    volumes_from:
+      - node-data
+    container_name: node
 
+  node-data:
+    image: node:6.9-alpine
+    volumes:
+        - ./src/server:/usr/src/app
+    command: "true"
+    container_name: node-data
 
-node-data:
-  image: node:6.9-alpine
-  volumes:
-      - ./src/server:/usr/src/app
-  command: "true"
-  container_name: node-data
+  mongo:
+    build: ./docker/mongodb
+    ports:
+      - 27017:27017
+    links:
+      - loggly
+    volumes_from:
+      - mongo-data
+    container_name: mongo
 
+  mongo-data:
+    image: node:6.9-alpine
+    volumes:
+        - ./src/data:/data/db
+    command: "true"
+    container_name: mongo-data
 
-mongo:
-  build: ./docker/mongodb
-  ports:
-    - 27017:27017
-  links:
-    - loggly
-  volumes_from:
-    - mongo-data
-  container_name: mongo
-
-
-mongo-data:
-  image: node:6.9-alpine
-  volumes:
-      - ./src/data:/data/db
-  command: "true"
-  container_name: mongo-data
-
-loggly:
-  build: ./docker/loggly
-  ports:
-    - 514/udp
-  environment:
-    - LOGGLY_AUTH_TOKEN=MY_LOGGLY_TOKEN
-    - LOGGLY_TAG=docker-loggly
+  loggly:
+    build: ./docker/loggly
+    ports:
+      - 514/udp
+    environment:
+      - TOKEN=MY_TOKEN
+      - TAG=loggly-docker
+    container_name: loggly-docker
