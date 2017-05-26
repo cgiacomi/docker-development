@@ -13,7 +13,8 @@ services:
 
   node:
     build: ./docker/node
-    command: sh -c 'npm install; npm start'
+    #command: sh -c 'npm install; npm start'
+    command: sh -c 'pm2-docker server.js'
     ports:
       - 8080:8080
     links:
@@ -26,7 +27,7 @@ services:
   node-data:
     image: node:6.9-alpine
     volumes:
-        - ./src/server:/usr/src/app
+        - ./src/server:/usr/src/server
     command: "true"
     container_name: node-data
 

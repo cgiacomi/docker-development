@@ -1,14 +1,15 @@
-FROM node:6.9-alpine
+#FROM node:6.9-alpine
+FROM keymetrics/pm2-docker-alpine
 
 ARG MONGODB_PORT_27017_TCP_PORT=27017
 
 # Install PM2
-RUN npm install -g pm2
-RUN npm install pm2
+RUN npm install pm2 -g
+#RUN npm install pm2
 
 
 # Define working directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src/server
 
 
 # Expose port
